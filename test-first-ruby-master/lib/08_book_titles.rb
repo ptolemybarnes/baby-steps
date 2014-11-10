@@ -1,3 +1,10 @@
 class Book
-  # TODO: your code goes here!
+def title(title)
+	@title
+end
+
+def title=(@title)
+	@title.capitalize
+end
+
 end
