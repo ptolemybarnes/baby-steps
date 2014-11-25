@@ -7,63 +7,85 @@ The use of "and" when writing out numbers is in compliance with British usage.
 
 class Integer
 
-def to_eng(space=true)
-num = self.to_s
-num_array = []
-selector = -1
-aand = true
+	def to_eng(space=true)
+		num_array = self.chunker(3, true)
+		stringed_array = []
+		chunk_particles = [nil,"thousand ","million ","billion "]
+		chunk_count = 0
 
-	while num[selector]
-		unless num[selector] == 0
-			if selector < -2 && aand
-				num_array.unshift "and"
-				num_array.unshift " " if space
-				aand = false
+		num_array.reverse_each do |chunk|
+			chunk_arr = []
+			chunk_arr.unshift chunk_particles[chunk_count]
+			
+			hundreds = chunk[-3]; tens = chunk[-2]; singles = chunk[-1]; teens = chunk[-2..-1]
+			if (10..19).include?(teens.to_i)
+				if (10..12).include?(teens.to_i)
+					irreg_teens = teens
+				else 
+					reg_teens = teens
+				end
 			end
-			num_array.unshift place_stringer(selector,num)
-			num_array.unshift under_ten_string(num[selector],selector)
+			####
+				if reg_teens
+					if reg_teens == "14"
+						chunk_arr.unshift "fourteen" # goddamn fourteen exception!
+					else 
+						chunk_arr.unshift get_string_hash(chunk[-1],-2) + "teen"
+					end
+				elsif irreg_teens
+					chunk_arr.unshift get_string_hash(irreg_teens,-1,"irreg")
+			# above for when first two digits (from right to left) are teens; below for when they are not.
+				elsif singles
+					chunk_arr.unshift get_string_hash(singles)
+					if tens
+						chunk_arr.unshift get_string_hash(tens,-2) + "ty" unless tens == "0"
+					end
+				end
+			####
+
+			if hundreds
+				chunk_arr.unshift "and" unless teens == "00"
+				chunk_arr.unshift get_string_hash(hundreds) + " hundred" if hundreds != "0"
+			end
+
+			stringed_array.unshift chunk_arr.join(" ")
+			chunk_count += 1
 		end
-		num_array.unshift " " if space
-		selector -= 1
+
+	stringed_array.join
 	end
 
-num_array.join("")
-end
+	def get_string_hash(number,pos=-1,type="reg")
+		pos = -1 if pos < -2
 
-def place_stringer(selector, num)
-place_string = "ty" if (selector == -2 && num[selector] > "1")
-place_string = "hundred" if (selector == -3 && num[selector] != "0")
-place_string = "thousand" if selector == -4
-place_string ||= ""
-end
-
-def under_ten_string(number,pos=-1)
-pos = -1 if pos < -2
-case number
-	when "1"
-		["ten","one"][pos]
-	when "2"
-		["twen","two"][pos]
-	when "3"
-		["thir","three"][pos]
-	when "4"
-		["for","four"][pos]
-	when "5"
-		["fif","five"][pos]
-	when "6"
-		"six"
-	when "7"
-		"seven"
-	when "8"
-		["eigh","eight"][pos]
-	when "9"
-		"nine"
+		get_string_hash = {
+			"reg" => {
+						"1"=> ["ten","one"][pos],
+						"2"=> ["twen","two"][pos],
+						"3"=> ["thir","three"][pos],
+						"4"=> ["for","four"][pos],
+						"5"=> ["fif","five"][pos],
+						"6"=> "six",
+						"7"=> "seven",
+						"8"=> ["eigh","eight"][pos],
+						"9"=> "nine"
+				},
+			"irreg"=> {
+						"10"=> "ten",
+						"11"=> "eleven",
+						"12"=> "twelve",
+				}
+			}
+		get_string_hash[type][number]
 	end
-end
+
+	def chunker(size,from_end=false)
+	    output = self.to_s.reverse.scan(/.{1,#{size}}/).collect {|chunk| chunk.reverse}
+	    from_end ? output.reverse : output
+	end
 
 end
 
-1001.times do |num|
-puts "#{num}: #{num.to_eng(true)}"
-end
-
+super_string = ""
+(1..1000).each {|val| super_string << val.to_eng}
+puts super_string.gsub(" ","").length
