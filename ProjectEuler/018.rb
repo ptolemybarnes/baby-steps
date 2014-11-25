@@ -9,9 +9,7 @@ attr_reader :print_sum_pyramid, :sum_pyramid
 		@sum_pyramid = []
 		@print_sum_pyramid = Proc.new {
 			lineWidth = 100
-			@sum_pyramid.each do |row|
-				puts(row.join("---").center(lineWidth))
-			end
+			@sum_pyramid.each {|row| puts(row.join("---").center(lineWidth))}
 		}
 	end
 
@@ -19,15 +17,9 @@ attr_reader :print_sum_pyramid, :sum_pyramid
 		@pyramid.size.times {@sum_pyramid.push []}
 		@sum_pyramid[-1] = @pyramid[-1]
 		row = -2
-
 		while @pyramid[row]
 			@pyramid[row].each_index do |index|
-				highest_child = @sum_pyramid[row+1][index] <=> @sum_pyramid[row+1][index+1]
-				if highest_child == 1
-					@sum_pyramid[row].push (@pyramid[row][index] + @sum_pyramid[row+1][index])
-				else
-					@sum_pyramid[row].push (@pyramid[row][index] + @sum_pyramid[row+1][index+1])
-				end
+				@sum_pyramid[row].push (@pyramid[row][index] + [@sum_pyramid[row.next][index], @sum_pyramid[row.next][index.next]].max)
 			end
 			row -= 1
 		end
