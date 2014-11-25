@@ -32,32 +32,6 @@ attr_reader :print_sum_pyramid, :sum_pyramid
 			row -= 1
 		end
 	end
-
-	def get_highest_route
-		route_record = [0]
-		@sum_pyramid.each_index do |row_index|
-			if @sum_pyramid[row_index+1]
-				highest_position = (@sum_pyramid[row_index+1][route_record.last] <=> @sum_pyramid[row_index+1][(route_record.last)+1])
-				if highest_position == 1
-					route_record.push route_record.last
-				else
-					route_record.push route_record.last+1
-				end
-			end
-		end
-		route_record
-	end
-
-	def get_route_sum(route_record)
-		sum_row = 0
-		sum = 0
-		route_record.each do |entry|
-			sum += @pyramid[sum_row][entry]
-			sum_row += 1
-		end
-		sum
-	end
-
 end
 
 start_pyramid = 	[[75], # row 0
@@ -79,5 +53,4 @@ start_pyramid = 	[[75], # row 0
 pyramid = Pyramid.new(start_pyramid)
 pyramid.make_sum_pyramid
 pyramid.print_sum_pyramid.call
-route_record = pyramid.get_highest_route
-puts "The route with the highest sum produces the sum #{pyramid.get_route_sum(route_record)}"
+puts "The route with the highest sum produces the sum #{pyramid.sum_pyramid[0][0]}"
