@@ -1,0 +1,6 @@
+RESPONSES = { 'goodbye' => 'bye', 
+              'sayonara' => 'sayonara', 
+              'the weather is (.*)' => 'I hate it when it\'s %{c1}', 
+              'I love (.*)' => 'I love %{c1} too', 
+              'I groove to (.*) and (.*)' => 'I love %{c1} but I hate %{c2}',
+              'When I say (.*), you should say (.*)' => "So when you say %{c1}, I should say %{c2}? Okay, got it!"}
