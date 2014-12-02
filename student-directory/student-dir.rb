@@ -18,31 +18,36 @@
 ##########################################################################################################################################
 
 class Student
-	attr_reader :name, :cohort, :age, :hobbies
+	attr_reader :i
 	STUDENTS = []
 
-	def initialize(name: "unknown",age: false,cohort: false, hobbies: false)
-		@name = name; @age = age; @cohort = cohort; @hobbies = hobbies;
+	def initialize(information)
+		information.default = false
+		@i = information
 		STUDENTS.push self.object_id
 	end
 
 	def get_info
-		output = []
-		output << " is #{@age} years old" if @age
-		output << "is in the #{@cohort} cohort" if @cohort
-		output << "likes #{@hobbies}" if @hobbies
-		output[-1].prepend("and ") if output.length > 2
-		output = output.join(", ") << "."
-		output.prepend("#{name}")
-		puts output
+		puts "All information about #{@i[:name]}: "
+		@i.each { |k,v| puts k.to_s + ": " + v}
 	end
 
 	def edit_student
-		puts "Let's edit #{@name}'s entry! Enter 'attribute: value.'"
+		puts "Let's edit #{@i[:name]}'s information! Enter 'attribute: value.'"
 		edit_done = false
 		until edit_done
 			input = gets.chomp
-
+			input = input[/(.*):+\s*(.*)/]
+			if $1 && $2
+				@i[$1.to_sym] = $2
+				puts "Edition successful!\n"
+				edit_done = true
+			elsif input == "quit"
+				puts "\nQuitting...\n"
+				edit_done = true
+			else
+				puts "Invalid input in edit_student"
+			end
 		end
 	end
 
@@ -90,7 +95,7 @@ class Directory
 		until quit
 			puts "Enter student's name:"
 			name_input = gets.chomp
-			Student::STUDENTS.each {|id| ObjectSpace._id2ref(id).send(method) if ObjectSpace._id2ref(id).name == name_input} #looks up students by object IDs.
+			Student::STUDENTS.each {|id| ObjectSpace._id2ref(id).send(method) if ObjectSpace._id2ref(id).i[:name] == name_input} #looks up students by object IDs.
 			if (name_input == "quit") || (name_input == "exit")
 				quit = true
 			end
@@ -99,11 +104,25 @@ class Directory
 
 	def list_all_students
 		puts "\nList of all students in directory:\n"
-		Student::STUDENTS.each {|id| puts ObjectSpace._id2ref(id).name}
+		puts
+		Student::STUDENTS.each {|id| puts ObjectSpace._id2ref(id).i[:name]}
 		puts
 	end
 
 	def add_student
+		add_done = false
+		puts "Let's add a student!"
+		puts "Enter the student's name:"
+		until add_done
+			input = gets.chomp
+			if input.match(/\S/)
+				Student.new(name: input)
+				puts "Student added!"
+				add_done = true
+			else
+				puts "Invalid input"
+			end
+		end
 	end
 
 	def display_stats
