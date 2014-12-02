@@ -18,8 +18,7 @@
 ##########################################################################################################################################
 
 class Student
-	attr_accessor :name, :cohort, :age, :hobbies
-	attr_reader
+	attr_reader :name, :cohort, :age, :hobbies
 	STUDENTS = []
 
 	def initialize(name: "unknown",age: false,cohort: false, hobbies: false)
@@ -39,7 +38,12 @@ class Student
 	end
 
 	def edit_student
-		puts "Let's edit the student!"
+		puts "Let's edit #{@name}'s entry! Enter 'attribute: value.'"
+		edit_done = false
+		until edit_done
+			input = gets.chomp
+
+		end
 	end
 
 end
@@ -94,12 +98,12 @@ class Directory
 	end
 
 	def list_all_students
+		puts "\nList of all students in directory:\n"
+		Student::STUDENTS.each {|id| puts ObjectSpace._id2ref(id).name}
+		puts
 	end
 
 	def add_student
-	end
-
-	def edit_student
 	end
 
 	def display_stats
