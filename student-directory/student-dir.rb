@@ -24,7 +24,7 @@ class Student
 
 	def initialize(name: "unknown",age: false,cohort: false, hobbies: false)
 		@name = name; @age = age; @cohort = cohort; @hobbies = hobbies;
-
+		STUDENTS.push self.object_id
 	end
 
 	def get_info
@@ -35,7 +35,11 @@ class Student
 		output[-1].prepend("and ") if output.length > 2
 		output = output.join(", ") << "."
 		output.prepend("#{name}")
-		output
+		puts output
+	end
+
+	def edit_student
+		puts "Let's edit the student!"
 	end
 
 end
@@ -49,10 +53,10 @@ class Directory
 	def handler
 
 		op_tree = {
-				"1" => ["Display information about a student.",method(:get_student_info)],
-				"2" => ["List all students",method(:list_all_students)],
-				"3" => ["Add student to directory",method(:add_student)],
-				"4" => ["Edit a single student's record",method(:edit_student)],
+				"1" => ["Display information about a student.",proc { view_or_edit_student(:get_info) }],
+				"2" => ["Edit a single student's record",proc { view_or_edit_student(:edit_student)}],
+				"3" => ["List all students",method(:list_all_students)],
+				"4" => ["Add student to directory",method(:add_student)],
 				"5" => ["Display aggregate statistics",method(:display_stats)],
 				"6" => ["Save directory",method(:save_dir)],
 				"7" => ["Load directory",method(:load_dir)],
@@ -60,7 +64,7 @@ class Directory
 		quit = false
 
 		until quit
-				op_tree.each do |num, label_arr|
+				op_tree.each do |num, label_arr| # lays out option tree.
 					puts "#{num}: #{label_arr[0]}"
 				end
 
@@ -77,9 +81,16 @@ class Directory
 		puts "\nQuitting directory..."
 	end
 
-	def get_student_info
-		puts "Enter student's name:"
-
+	def view_or_edit_student(method)
+		quit = false 
+		until quit
+			puts "Enter student's name:"
+			name_input = gets.chomp
+			Student::STUDENTS.each {|id| ObjectSpace._id2ref(id).send(method) if ObjectSpace._id2ref(id).name == name_input} #looks up students by object IDs.
+			if (name_input == "quit") || (name_input == "exit")
+				quit = true
+			end
+		end
 	end
 
 	def list_all_students
