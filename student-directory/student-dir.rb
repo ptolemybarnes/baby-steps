@@ -54,17 +54,22 @@ class Student
 end
 
 class Directory
+	attr_reader
 
 	def initialize
-	@students = Student::STUDENTS
 	end
 
 	def handler
 
+		puts("########################################################################################".red.center(100))
+		puts("############################ WELCOME TO THE STUDENT DIRECTORY ##########################".red.center(100))
+		puts("########################################################################################".red.center(100))
+		puts("Select an option".center(100))
+
 		op_tree = {
-				"1" => ["Display information about a student.",proc { view_or_edit_student(:get_info) }],
-				"2" => ["Edit a single student's record",proc { view_or_edit_student(:edit_student)}],
-				"3" => ["List all students",method(:list_all_students)],
+				"1" => ["Display information about a student.",proc { view_or_edit_student(:get_info) },true],
+				"2" => ["Edit a single student's record",proc { view_or_edit_student(:edit_student)},true],
+				"3" => ["List all students",method(:list_all_students),true],
 				"4" => ["Add student to directory",method(:add_student)],
 				"5" => ["Display aggregate statistics",method(:display_stats)],
 				"6" => ["Save directory",method(:save_dir)],
@@ -74,14 +79,14 @@ class Directory
 
 		until quit
 				op_tree.each do |num, label_arr| # lays out option tree.
-					puts "#{num}: #{label_arr[0]}"
+					puts "#{num}: #{label_arr[0]}".margin(5)
 				end
 
 				input = gets.chomp
 
 				if op_tree[input]
 					op_tree[input][1].call
-				elsif (input == "quit" || input == "exit")
+				elsif input.quit?
 					quit = true
 				else 
 					puts "\nInvalid option\n"
@@ -96,17 +101,38 @@ class Directory
 			puts "Enter student's name:"
 			name_input = gets.chomp
 			Student::STUDENTS.each {|id| ObjectSpace._id2ref(id).send(method) if ObjectSpace._id2ref(id).i[:name] == name_input} #looks up students by object IDs.
-			if (name_input == "quit") || (name_input == "exit")
+			if name_input.quit?
 				quit = true
 			end
 		end
 	end
 
 	def list_all_students
-		puts "\nList of all students in directory:\n"
-		puts
-		Student::STUDENTS.each {|id| puts ObjectSpace._id2ref(id).i[:name]}
-		puts
+		puts "List students by " + get_keys.join(", ") + ". Please choose:"
+		
+		quit = false
+		until quit
+		list_by = false
+			until list_by
+				input = gets.chomp.intern
+				if get_keys.include?(input)
+					list_by = input 
+				elsif input.to_s.quit?
+					puts "Quitting"
+					quit = true; list_by = true;
+				else
+					puts "#{input} is not a valid list criterion."
+				end
+			end
+			order_hash = {}
+			Student::STUDENTS.each {|id| order_hash[ObjectSpace._id2ref(id).i[:name]] = ObjectSpace._id2ref(id).i[list_by]}
+			order_hash = order_hash.each {|key, val| order_hash[key] = "?????" if val == false } #gives std "????" val if val is not present for order criterion.
+			puts "List of students by #{list_by}:"
+			order_hash.values.uniq.sort.each do |val| 
+				puts val + ":"
+				print " " + order_hash.select {|key,value| value == val }.keys.join(", ") + "\n" unless list_by == :name # ensures names are not printed twice if :name is the order criterion.
+			end
+		end
 	end
 
 	def add_student
@@ -129,14 +155,46 @@ class Directory
 	end
 
 	def save_dir
+		puts "Let's save the directory!"
+		saved_dirs = File.open('./saved.dirs', "a")
+		Student::STUDENTS.each do |id|
+			saved_dirs.puts ObjectSpace._id2ref(id).i
+			puts ObjectSpace._id2ref(id).i[:name] + " was saved to file!"
+		end
 	end
 
 	def load_dir
+		puts "Let's load a directory! Clearing current directory..."
+		Student::STUDENTS.clear
+		students = File.open("./saved.dirs", "r"){|datafile|
+				datafile.readlines
+		}
+		students.each {|line| Student.new(eval(line))}
+	end
+
+	def get_keys
+		keys_array = Student::STUDENTS.collect {|id| ObjectSpace._id2ref(id).i.keys}.flatten.uniq #gets all attributes in existence.
+		keys_array.collect {|key| key.intern }
 	end
 
 end
 
-me = Student.new(name: "Ptolemy", hobbies: "playing volleyball", age: "26", cohort: "December")
-Dave = Student.new(name: "Dave", hobbies: "collecting stamps", age: "30", cohort: "December")
+class String # does colours.
+	def red
+	"\e[31m" + self + "\e[0m"
+	end
+	def blue
+	"\e[34m" + self + "\e[0m"
+	end
+
+	def quit?
+		(self == "quit" || self == "exit")
+	end
+
+	def margin(width)
+		self.prepend(" "*width)
+	end
+end
+
 dir = Directory.new
 dir.handler
