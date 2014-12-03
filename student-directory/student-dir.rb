@@ -157,7 +157,7 @@ class Directory
 
 	def save_dir
 		puts "Let's save the directory!"
-		saved_dirs = File.open('./saved.dirs', "a")
+		saved_dirs = File.open('./saved.txt', "a")
 		Student::STUDENTS.each do |id|
 			saved_dirs.puts ObjectSpace._id2ref(id).i
 			puts ObjectSpace._id2ref(id).i[:name] + " was saved to file!"
@@ -167,7 +167,7 @@ class Directory
 	def load_dir
 		puts "Let's load a directory! Clearing current directory..."
 		Student::STUDENTS.clear
-		students = File.open("./saved.dirs", "r"){|datafile|
+		students = File.open("./saved.txt", "r"){|datafile|
 				datafile.readlines
 		}
 		students.each {|line| Student.new(eval(line))}
