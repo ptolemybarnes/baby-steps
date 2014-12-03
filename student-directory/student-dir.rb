@@ -66,26 +66,26 @@ class Directory
 		puts("########################################################################################".red.center(100))
 		puts("Select an option".center(100))
 
-		op_tree = {
-				"1" => ["Display information about a student.",proc { view_or_edit_student(:get_info) },true],
-				"2" => ["Edit a single student's record",proc { view_or_edit_student(:edit_student)},true],
-				"3" => ["List all students",method(:list_all_students),true],
-				"4" => ["Add student to directory",method(:add_student)],
-				"5" => ["Display aggregate statistics",method(:display_stats)],
-				"6" => ["Save directory",method(:save_dir)],
-				"7" => ["Load directory",method(:load_dir)],
-			}
+		menu_options = [
+				["Display information about a student.",proc { view_or_edit_student(:get_info)}],
+				["Edit a single student's record",proc { view_or_edit_student(:edit_student)}],
+				["List all students",method(:list_all_students)],
+				["Add student to directory",method(:add_student)],
+				["Display aggregate statistics",method(:display_stats)],
+				["Save directory",method(:save_dir)],
+				["Load directory",method(:load_dir)],
+			]
 		quit = false
-
+		
 		until quit
-				op_tree.each do |num, label_arr| # lays out option tree.
-					puts "#{num}: #{label_arr[0]}".margin(5)
+				menu_options.each_with_index do |label_arr, number| # lays out menu options
+					puts "#{number + 1}: #{label_arr[0]}".margin(5)
 				end
 
 				input = gets.chomp
 
-				if op_tree[input]
-					op_tree[input][1].call
+				if input.respond_to?(:to_i) && menu_options[input.to_i-1]
+					menu_options[input.to_i-1][1].call
 				elsif input.quit?
 					quit = true
 				else 
@@ -95,15 +95,16 @@ class Directory
 		puts "\nQuitting directory..."
 	end
 
+	# methods for manipulating student data from within directory.
+
 	def view_or_edit_student(method)
-		quit = false 
+		quit = false
+
 		until quit
 			puts "Enter student's name:"
 			name_input = gets.chomp
 			Student::STUDENTS.each {|id| ObjectSpace._id2ref(id).send(method) if ObjectSpace._id2ref(id).i[:name] == name_input} #looks up students by object IDs.
-			if name_input.quit?
-				quit = true
-			end
+			quit = true if name_input.quit?
 		end
 	end
 
