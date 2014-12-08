@@ -1,7 +1,5 @@
 {:name=>"Ptolemy", :hobbies=>"playing volleyball", :age=>"26", :cohort=>"November"}
-{:name=>"Ptolemy", :hobbies=>"playing volleyball", :age=>"26", :cohort=>"November", :eyes=>"brown"}
-{:name=>"Vika", :eyes=>"brown", :age=>"24"}
-{:name=>"Ptolemy", :hobbies=>"playing volleyball", :age=>"26", :cohort=>"November"}
-{:name=>"Ptolemy", :hobbies=>"playing volleyball", :age=>"26", :cohort=>"November", :eyes=>"brown"}
 {:name=>"Vika", :eyes=>"brown", :age=>"24"}
 {:name=>"Steve", :eyes=>"blue", :hometown=>"London"}
+{:name=>"Johnny"}
+{:name=>"Danielle"}

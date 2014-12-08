@@ -24,7 +24,7 @@ class Student
 	def initialize(information)
 		information.default = false
 		@i = information
-		STUDENTS.push self.object_id
+		STUDENTS.push self
 	end
 
 	def get_info
@@ -103,7 +103,7 @@ class Directory
 		until quit
 			puts "Enter student's name:"
 			name_input = gets.chomp
-			Student::STUDENTS.each {|id| ObjectSpace._id2ref(id).send(method) if ObjectSpace._id2ref(id).i[:name] == name_input} #looks up students by object IDs.
+			Student::STUDENTS.each {|student| student.send(method) if student.i[:name] == name_input}
 			quit = true if name_input.quit?
 		end
 	end
@@ -126,7 +126,7 @@ class Directory
 				end
 			end
 			order_hash = {}
-			Student::STUDENTS.each {|id| order_hash[ObjectSpace._id2ref(id).i[:name]] = ObjectSpace._id2ref(id).i[list_by]}
+			Student::STUDENTS.each {|student| order_hash[student.i[:name]] = student.i[list_by]}
 			order_hash = order_hash.each {|key, val| order_hash[key] = "?????" if val == false } #gives std "????" val if val is not present for order criterion.
 			puts "List of students by #{list_by}:"
 			order_hash.values.uniq.sort.each do |val| 
@@ -157,10 +157,10 @@ class Directory
 
 	def save_dir
 		puts "Let's save the directory!"
-		saved_dirs = File.open('./saved.txt', "a")
-		Student::STUDENTS.each do |id|
-			saved_dirs.puts ObjectSpace._id2ref(id).i
-			puts ObjectSpace._id2ref(id).i[:name] + " was saved to file!"
+		saved_dirs = File.open('./saved.txt', "w")
+		Student::STUDENTS.each do |student|
+			saved_dirs.puts student.i
+			puts student.i[:name] + " was saved to file!"
 		end
 	end
 
@@ -174,7 +174,7 @@ class Directory
 	end
 
 	def get_keys
-		keys_array = Student::STUDENTS.collect {|id| ObjectSpace._id2ref(id).i.keys}.flatten.uniq #gets all attributes in existence.
+		keys_array = Student::STUDENTS.collect {|student| student.i.keys}.flatten.uniq #gets all attributes in existence.
 		keys_array.collect {|key| key.intern }
 	end
 
