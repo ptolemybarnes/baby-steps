@@ -10,8 +10,8 @@ class Integer
 	def to_eng(space=true)
 		num_array = self.chunker(3, true)
 		stringed_array = []
-		chunk_particles = [nil,"thousand ","million ","billion "]
-		chunk_count = 0
+		chunk_particles = [nil,nil,"thousand ","million ","billion "]
+		chunk_count = 1
 
 		num_array.reverse_each do |chunk|
 			chunk_arr = []
@@ -50,6 +50,7 @@ class Integer
 
 			stringed_array.unshift chunk_arr.join(" ")
 			chunk_count += 1
+			stringed_array.unshift 
 		end
 
 	stringed_array.join
@@ -86,6 +87,4 @@ class Integer
 
 end
 
-super_string = ""
-(1..1000).each {|val| super_string << val.to_eng}
-puts super_string.gsub(" ","").length
+puts 99131919.to_eng

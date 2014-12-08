@@ -1,17 +1,18 @@
 ####### satisfies need to lazer things #######
 
-class String
+class Array
 
-	def lazer(mode="blast")
-		self.length/5 > 0 ? scope = self.length/5 : scope = 1
-		fillmode = case mode
-							 when "blast"
-							 	[" "]
-							 when "stun"
-							 	self.chars[length/2-scope/2..length/2+scope/2]
-							 end
-		self.chars.fill(fillmode.sample,self.length/2-scope/2,scope).join
+	def lazer(mode="blast",strength=5)
+		start = (self.length/2)-(self.length/strength/2)
+		finish = (self.length/2)+(self.length/strength/2)
+
+		effect= case mode
+						when "blast"
+						self[3..6].fill(" ")
+						# when "stun"
+						# self.each[start..finish].shuffle.join
+					end
 	end
-
 end
 
+puts [1,2,3,4,5,6,7,8,9].lazer.join(", ")

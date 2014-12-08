@@ -14,15 +14,26 @@ class Integer
   end
 
   def get_proper_divisors
-  	divisor_array = []
-  	1.upto(self/2) {|div| divisor_array.push div if div.is_proper_divisor?(self)}
+  	divisor_array = [1]
+  	root = Math.sqrt(self)
+  	if (root**2) == (root.to_i**2) # ensures root is not pushed twice if perfect root
+  		divisor_array.push root.to_i
+  		root -= 1
+  	end
+  	
+  	2.upto(root) do |div| 
+  		if div.is_proper_divisor?(self)
+		  		divisor_array.push div
+		  		divisor_array.push self/div # as every divisor lower than sqr root has a pair above such that (div < sqr) * (div > sqr) == dividend.
+  		end
+  	end
   	divisor_array
 	end
 
 	def has_amicable_pair?
-		sum_of_divisors = self.get_proper_divisors.reduce(:+)
-		if (sum_of_divisors.get_proper_divisors.reduce(:+) == self) && (sum_of_divisors != self)
-			[self, sum_of_divisors]
+		div_sum = self.get_proper_divisors.reduce(:+)
+		if (div_sum.get_proper_divisors.reduce(:+) == self) && (div_sum != self) # conditions: 1) d(a) = b and d(b) = a && 2) a ≠ b
+			[self, div_sum]
 		else 
 			false
 		end
@@ -30,5 +41,7 @@ class Integer
 	
 end
 
+time = Time.new
 puts 2.upto(10000).select {|v| v.has_amicable_pair?}.inject(:+)
+puts Time.new - time
 
