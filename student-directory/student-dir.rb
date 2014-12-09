@@ -33,7 +33,7 @@ class Student
 	end
 
 	def edit_student
-		puts "Let's edit #{@i[:name]}'s information! Enter 'attribute: value.'"
+		puts "Enter 'attribute: value.'"
 		edit_done = false
 		until edit_done
 			input = gets.chomp
@@ -75,7 +75,6 @@ class Directory
 				["Save directory",method(:save_dir)],
 				["Load directory",method(:load_dir)],
 			]
-		quit = false
 		
 		until quit
 				menu_options.each_with_index do |label_arr, number| # lays out menu options
@@ -84,10 +83,10 @@ class Directory
 
 				input = gets.chomp
 
-				if input.respond_to?(:to_i) && menu_options[input.to_i-1]
+				if input.quit?
+					quit = true 
+				elsif input.respond_to?(:to_i) && menu_options[input.to_i-1]
 					menu_options[input.to_i-1][1].call
-				elsif input.quit?
-					quit = true
 				else 
 					puts "\nInvalid option\n"
 				end
@@ -113,27 +112,32 @@ class Directory
 		
 		quit = false
 		until quit
+			list_criterion = get_list_criterion
+			order_hash = {}
+			Student::STUDENTS.each {|student| order_hash[student.i[:name]] = student.i[list_criterion]}
+			order_hash = order_hash.each {|key, val| order_hash[key] = "?????" if val == false } #gives std "????" val if val is not present for order criterion.
+			puts "List of students by #{list_criterion}:"
+			order_hash.values.uniq.sort.each do |val| 
+				puts val + ":"
+				print " " + order_hash.select {|key,value| value == val }.keys.join(", ") + "\n" unless list_criterion == :name # ensures names are not printed twice if :name is the order criterion.
+			end
+		end
+	end
+
+	def get_list_criterion
 		list_by = false
 			until list_by
-				input = gets.chomp.intern
-				if get_keys.include?(input)
+				input = gets.chomp
+				if get_keys.include?(input.intern)
 					list_by = input 
-				elsif input.to_s.quit?
+				elsif input.quit?
 					puts "Quitting"
-					quit = true; list_by = true;
+					exit!
 				else
 					puts "#{input} is not a valid list criterion."
 				end
 			end
-			order_hash = {}
-			Student::STUDENTS.each {|student| order_hash[student.i[:name]] = student.i[list_by]}
-			order_hash = order_hash.each {|key, val| order_hash[key] = "?????" if val == false } #gives std "????" val if val is not present for order criterion.
-			puts "List of students by #{list_by}:"
-			order_hash.values.uniq.sort.each do |val| 
-				puts val + ":"
-				print " " + order_hash.select {|key,value| value == val }.keys.join(", ") + "\n" unless list_by == :name # ensures names are not printed twice if :name is the order criterion.
-			end
-		end
+		list_by
 	end
 
 	def add_student
