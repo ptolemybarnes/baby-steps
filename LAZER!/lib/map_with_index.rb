@@ -26,18 +26,12 @@ class Array
   end
 
   def shoot(start = nil)
-    if start
-      starting_value = start
-      starting_index = 0
-    else
-      starting_value = self[0]
-      starting_index = 1
-    end
+    v, i = (start ? start : self[0]), (start ? 0 : 1)
 
-    while self[starting_index]
-      starting_value = yield(starting_value, self[starting_index])
-      starting_index += 1
+    while self[i]
+      v = yield(v, self[i])
+      i += 1
     end
-    starting_value
+    v
   end
 end

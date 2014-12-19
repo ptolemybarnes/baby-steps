@@ -33,4 +33,9 @@ describe 'shoot' do
       expect([1,2,3,4,5].shoot {|sum, value| sum + value}).to eq(15)
     end
   end
+  context 'when called on an array of strings' do
+    it 'should concatenate the strings' do
+      expect(["one","two","three"].shoot {|collector, string| collector + string}).to eq("onetwothree")
+    end
+  end
 end
