@@ -20,7 +20,7 @@ class Array
     new_array
   end
 
-  def collapse(start = nil)
+  def collapse(start = nil, &block)
     v, i = (start ? start : self[0]), (start ? 0 : 1)
     while self[i]
       v = yield(v, self[i])
@@ -29,10 +29,10 @@ class Array
     v
   end
 
-  def map_with_recursion new_array = []
+  def map_with_recursion new_array = [], &block
     return new_array if new_array.length == self
     new_array << yield(self[new_array.length])
-    map_with_recursion(new_array)
+    map_with_recursion(new_array, block)
   end
 
 
