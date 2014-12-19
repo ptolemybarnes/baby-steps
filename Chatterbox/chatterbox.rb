@@ -2,7 +2,7 @@ require './responses.rb'
 
 def get_response(input)
   key = RESPONSES.keys.select {|k| /#{k}/ =~ input }.sample # the equals-tilde operator matches strings with regex. sample selects a random.
-  /#{key}/ =~ input # checks if key matches input. (But why do this again?) To assign the capture groups. 
+  /#{key}/ =~ input # checks if key matches input. (But why do this again?) To assign the capture groups.
   response = RESPONSES[key]
 	if response == "So when you say %{c1}, I should say %{c2}? Okay, got it!"
 		RESPONSES[$1] = $2

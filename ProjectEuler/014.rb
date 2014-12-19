@@ -15,6 +15,8 @@ def collatz_length(start)
 collatz_array.length
 end
 
+
+
 def longest_collatz(maximum)
 
 	start = 1; longest_starter = 1; longest_starter_length = 1
