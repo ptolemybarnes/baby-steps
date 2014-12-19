@@ -9,6 +9,15 @@ describe 'each' do
   end
 end
 
+# describe 'map_with_recursion' do
+#   context 'when called on an array of integers' do
+#     it 'should return the original integers with a number added' do
+#       array = [1,2,3,4,5]
+#       expect(array.map_with_recursion {|x| x + 1 }).to eq(array.map { |x| x + 1 })
+#     end
+#   end
+# end
+
 describe 'each_with_index_special' do
   context 'when called on an array of integers' do
     it 'should return the original integers with their index added to them' do
@@ -18,24 +27,38 @@ describe 'each_with_index_special' do
   end
 end
 
-# describe 'map_with_index' do
-#   context 'when called on an array of strings' do
-#     it 'should return an array of strings with the original string and index number.' do
-#       array = ['Zeroth','First','Second','Third','Fourth']
-#       expect(array.map_with_index {|item, index| "#{item} at index #{index}" if item.length > 5 }).to eq(["Zeroth at index 0", nil, "Second at index 2", nil, "Fourth at index 4"])
-#     end
-#   end
-# end
-
-describe 'shoot' do
+describe 'collapse' do
   context 'when called on an array of numbers with no argument' do
     it 'should return a sum of those numbers' do
-      expect([1,2,3,4,5].shoot {|sum, value| sum + value}).to eq(15)
+      array = [1,2,3,4,5]
+      expect(array.collapse {|sum, value| sum + value}).to eq(array.inject {|sum, value| sum + value})
+    end
+  end
+  context 'when called on an array of numbers with an argument' do
+    it 'should return a sum of those numbers' do
+      array = [1,2,3,4,5]
+      expect(array.collapse(10) {|sum, value| sum + value}).to eq(array.inject(10) {|sum, value| sum + value})
     end
   end
   context 'when called on an array of strings' do
     it 'should concatenate the strings' do
-      expect(["one","two","three"].shoot {|collector, string| collector + string}).to eq("onetwothree")
+      expect(["one","two","three"].collapse {|collector, string| collector + string}).to eq(["one","two","three"].inject {|collector, string| collector + string})
+    end
+  end
+  context 'when called with method shorthand on numbers' do
+    it 'should return a sum of those numbers' do
+      array = [1,2,3,4,5]
+      expect(array.collapse(:+)).to eq(array.inject(:+))
     end
   end
 end
+
+
+
+
+
+
+
+
+
+
