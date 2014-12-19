@@ -52,11 +52,20 @@ describe 'collapse' do
     end
   end
 
-  context 'when called with method shorthand on numbers' do
-    it 'should return a sum of those numbers' do
+  context 'when called with method/block shorthand on numbers' do
+    it 'should return a sum/product of those numbers' do
       array = [1,2,3,4,5]
       expect(array.collapse(&:+)).to eq(array.inject(:+))
       expect(array.collapse(&:*)).to eq(array.inject(:*))
+      expect(array.collapse(10, &:*)).to eq(array.inject(10, :*))
+    end
+  end
+
+  context 'when called with block shorthand on numbers' do
+    it 'should return a sum/product of those numbers' do
+      array = [1,2,3,4,5]
+      expect(array.collapse(10, :*)).to eq(array.inject(10, :*))
+      expect(array.collapse(:*)).to eq(array.inject(:*))
     end
   end
 

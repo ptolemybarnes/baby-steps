@@ -20,7 +20,10 @@ class Array
     new_array
   end
 
-  def collapse(start = nil, &block)
+  def collapse(*args, &proc)
+    start = (args[0].class == Fixnum) ? args[0] : nil
+    symbol = args.bsearch {|item| item.class == Symbol}
+    return collapse(start, &symbol.to_proc) if symbol
     v, i = (start ? start : self[0]), (start ? 0 : 1)
     while self[i]
       v = yield(v, self[i])
@@ -32,8 +35,17 @@ class Array
   def map_with_recursion new_array = [], &block
     return new_array if new_array.length == self
     new_array << yield(self[new_array.length])
-    map_with_recursion(new_array, block)
+    map_with_recursion(new_array, &block)
   end
 
+  def collapse2(start = nil, symbol = nil, &proc)
+    return collapse(start, &symbol.to_proc) if symbol
+    v, i = (start ? start : self[0]), (start ? 0 : 1)
+    while self[i]
+      v = yield(v, self[i])
+      i += 1
+    end
+    v
+  end
 
 end
