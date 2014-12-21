@@ -69,6 +69,14 @@ describe 'collapse' do
     end
   end
 
+  context 'when called with method/symbol shorthand on floats' do
+    it 'should return a sum/product of those floats' do
+      array = [1.1,2.3,3.5,4.7,5.9]
+      expect(array.collapse(10.6, :*)).to eq(array.inject(10.6, :*))
+      expect(array.collapse(:*)).to eq(array.inject(:*))
+    end
+  end
+
 end
 
 
