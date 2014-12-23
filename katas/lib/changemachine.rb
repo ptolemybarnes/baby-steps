@@ -12,19 +12,11 @@ e.g change(31) # => { 25 => 1, 10 => 0, 5 => 1, 1 => 1 }
 =end
 
 def changemachine(cents)
-  change = Hash.new(0)
-  return { 25 => 0, 10 => 0, 5 => 0, 1 => 0 } if cents <= 0
-  
-  change[25] = cents / 25
-       cents = cents % 25
+  change = { 25 => 0, 10 => 0, 5 => 0, 1 => 0 }
+  return change if cents <= 0
 
-  change[10] = cents / 10
-       cents = cents % 10
-
-   change[5] = cents / 5
-       cents = cents % 5
-
-   change[1] = cents / 1
-
-  change
+  change.each do |coin, num|
+    change[coin] += (cents / coin)
+    cents = (cents % coin )
+  end
 end
