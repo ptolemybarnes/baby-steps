@@ -22,7 +22,7 @@ b = [[1,2,3],[5,6,7],[8,9,10]]
 
   describe 'mult_row' do
     it 'can multiple two arrays by each other' do
-      expect(mult_row([1,2,3],[5,6,7])).to eq(38)
+      expect(multiply_rows([1,2,3],[5,6,7])).to eq(38)
     end
   end
 

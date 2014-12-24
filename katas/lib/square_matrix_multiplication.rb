@@ -2,36 +2,28 @@
 # Write a method that multiplies two 2D-arrays to create a third. 
 
 def matrix_multiply a, b
-  a.each_with_index.map do |arr, idx|
-    single_row arr, b
-  end
+  a.each_with_index.map {|arr, idx| single_row arr, b }
 end
 
-def single_row a, b
-  c_row = []
-  a.size.times do |idx| 
-    c_row.push single_fig a, b, idx
-  end
-  c_row
+# returns a single row of c.
+def single_row a, b 
+  a.each_with_index.map { |a_val, idx| single_fig a, b, idx }
 end
 
-def single_fig a, b, row_number
-  b = make_column_array b, row_number
-  mult_row a, b
+# returns a single figure of c.
+def single_fig a_row, b, row_number
+  b_row = make_column_array b, row_number
+  multiply_rows a_row, b_row
 end
 
-def mult_row a, b
-  products = []
-  a.each_with_index {|value, idx| products << a[idx] * b[idx]}
-  products.inject(:+)
+# multiplies two rows together to get a single figure.
+def multiply_rows a, b
+  a.each_with_index.map {|value, idx| a[idx] * b[idx]}.inject(:+)
 end
 
-def make_column_array arrays, col
-  column = []
-  arrays.each do |row|
-    column.push row[col]
-  end
-column
+#takes a 2D array and makes new arrays from its columns
+def make_column_array arrays, col_num
+  arrays.map {|row| row[col_num] }
 end
 
 =begin
