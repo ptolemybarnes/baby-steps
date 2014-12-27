@@ -8,6 +8,12 @@ it 'returns total ips between two ips' do
   expect(ipsBetween("20.0.0.10", "20.0.1.0")).to eq(246)
 end
 
+it 'returns the total value of an ip' do
+  expect(get_ip_value("10.0.0.0")).to eq(167772160)
+
+
+end
+
 
 
 

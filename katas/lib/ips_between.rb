@@ -10,17 +10,10 @@ All input to the ipsBetween function will be valid IPv4 addresses
 =end
 
 def ipsBetween(start, ending)
-  start       = start.split('.').map {|val| val.to_i }
-  start_total = start[3]
-  start_total+= start[2] * 256
-  start_total+= start[1] * 256 * 256
-  start_total+= start[0] * 256 * 256 * 256
+  get_ip_value(ending) - get_ip_value(start)
+end
 
-  ending       = ending.split('.').map {|val| val.to_i }
-  ending_total = ending[3]
-  ending_total+= ending[2] * 256
-  ending_total+= ending[1] * 256 * 256
-  ending_total+= ending[0] * 256 * 256 * 256
-
-  ending_total - start_total
+def get_ip_value ip
+  ip = ip.split('.')
+  ip.reverse.each_with_index.map {|num, idx| num.to_i * (256**idx)}.inject(:+)
 end
