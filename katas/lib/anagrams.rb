@@ -2,5 +2,5 @@
 # Returns an array of the actual anagram.
 
 def anagrams(baseword,anagrams)
-  anagrams.map {|word| word if baseword.chars.sort == word.chars.sort }.compact
+  anagrams.select {|word| baseword.chars.sort == word.chars.sort }
 end
