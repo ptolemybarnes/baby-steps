@@ -1,10 +1,9 @@
-def is_prime? number
-  2.upto(Math::sqrt(number)) do |divisor|
-    return false if (number % divisor == 0)
-  end
-  true
+def isnt_prime? number
+  (2..Math::sqrt(number)).any? {|div| number % div == 0 }
 end
 
 def prime number
-  (2..number).to_a.select {|number| is_prime?(number) }
+  (2..number).reject {|number| isnt_prime?(number) }
 end
+
+# refactor using .any? method.
