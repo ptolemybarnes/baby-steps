@@ -1,3 +1,6 @@
+# CodeWars Kata: http://www.codewars.com/kata/52996b5c99fdcb5f20000004/train/ruby
+# Solution by Ptolemy Barnes.
+
 =begin 
 Your task is to implement a function that calculates an election winner from a list of 
 voter selections using an Instant Runoff Voting algorithm:
@@ -27,19 +30,19 @@ def get_leading_votes_from voters
 end
 
 def who_has_most votes
-  votes.max_by{|x| votes.count(x) }
+  votes.max_by {|x| votes.count(x) }
 end
 
 def is_winner? candidate, votes 
   votes.count(candidate) / votes.size.to_f > 0.5
 end
 
-# problem: returns all candidates if they are all equally bad, resulting in them all being eliminated.
 def who_has_least votes, counts
   votes.each {|vote| counts[vote] += 1}
-  lowest_count = counts.values.min_by {|count| count }
-  losers       = counts.keys.select {|party| counts[party] == lowest_count }
-  losers.size == votes.size ? [] : losers
+  losers = counts.select do |cand, votes|
+            (votes == counts.values.min && votes != counts.values.max)
+           end
+  losers.keys
 end
 
 def get_candidates_hash voters
