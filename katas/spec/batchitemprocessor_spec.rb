@@ -1,3 +1,1 @@
-require './lib/batchitemprocessor_spec'
-
-describe BatchItemP
+require './lib/batchitemprocessor'

@@ -18,7 +18,9 @@ it will determine which hash key to use as the identifying value (if a hash is p
  It accepts a symbol or string argument that determines the hash key/method name to be used to identify an item. 
  If this method is not called then the item/hash instances will be compared to each other directly.
 should_process - The purpose of this method is to configure an optional callback method that will be used to determine if an item should be processed. 
-This optional callback would return true if the item should be processed, otherwise it will return false. When this method is used, the callback passed to it will be used in conjunction with the built-in "has this item already been processed?" logic.
+This optional callback would return true if the item should be processed, otherwise it will return false. When this method is used, the callback passed 
+to it will be used in conjunction with the built-in "has this item already been processed?" logic.
+
 reset - If called will reset the processed item state, allowing items to be reprocessed again.
 
 Examples:

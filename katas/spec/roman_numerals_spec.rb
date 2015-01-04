@@ -25,4 +25,3 @@ require './lib/roman_numerals'
 #     expect(roman_numerals(30)).to eq('XXX')
 #     expect(roman_numerals(40)).to eq('XV')
 #   end
-end
