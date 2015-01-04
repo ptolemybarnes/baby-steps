@@ -10,27 +10,14 @@ starting with the left most digit and skipping any digit with a value of zero.
 =end
 
 def roman_numerals number
-  output = ""
-  number = number.to_s.chars.map {|char| char.to_i}
-  output.prepend first_ten(number[-1]) if number[-1]
-  output.prepend tens(number[-2]) if number[-2]
-  output.prepend hundreds(number[-3]) if number[-3]
-  output.prepend thousands(number[-4]) if number[-4]
-  output
+  number.to_s.chars.reverse.each_with_index.map do |num, idx|
+    convert[idx][num.to_i]
+  end.reverse.join
 end
 
-def first_ten(number)
-["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][number]
-end
-
-def tens(number)
-["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"][number]
-end
-
-def hundreds(number)
-["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"][number]
-end
-
-def thousands(number)
-'M' * number
+def convert
+[["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"],
+["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"],
+["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"],
+["", 'M', 'MM', 'MMM', 'MMMM']]
 end
