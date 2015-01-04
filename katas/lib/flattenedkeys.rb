@@ -8,7 +8,7 @@ The keys from the nested hash will be merged into the parent, separated by under
 class Hash
 
   def flattened_keys
-    output = Hash.new
+    output = {}
       self.each do |par_key, par_val|
         if par_val.is_a? Hash
           par_val.each do |child_key, child_val|

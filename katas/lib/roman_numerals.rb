@@ -11,10 +11,26 @@ starting with the left most digit and skipping any digit with a value of zero.
 
 def roman_numerals number
   output = ""
-  output << 'X' * (number/10)
-  output << first_ten(number - ((number/10)*10))
+  number = number.to_s.chars.map {|char| char.to_i}
+  output.prepend first_ten(number[-1]) if number[-1]
+  output.prepend tens(number[-2]) if number[-2]
+  output.prepend hundreds(number[-3]) if number[-3]
+  output.prepend thousands(number[-4]) if number[-4]
+  output
 end
 
 def first_ten(number)
-{0 => "", 1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V', 6 => 'VI', 7 => 'VII', 8 => 'VIII', 9 => 'IX', 10 => 'X'}[number]
+["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][number]
+end
+
+def tens(number)
+["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"][number]
+end
+
+def hundreds(number)
+["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"][number]
+end
+
+def thousands(number)
+'M' * number
 end
