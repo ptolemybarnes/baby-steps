@@ -19,31 +19,14 @@
 #########################################################################################################################################
 ############################################ https://projecteuler.net/problem=24 ########################################################
 
-# 2 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1 = 725760
-# 3 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1 = 1088640
-# this means that the millionth value will be a number 2????????? so we need only calculate these.
-
-puts 3 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1
-
-# left = 0, right = left.next
-# reset = Proc.new { pos1 = 0, pos2 = 1, pos3 = 2, pos4 = 3, pos5 = 4, pos6 = 5, pos7 = 6, pos8 = 7, pos9 = 8, pos10 = 9 }
-# pos_arr = [pos1,pos2,pos3,pos4,pos5,pos6,pos7,pos8,pos9,pos10]
-
-# until perms == 1_000_000
-	
-# 	until left > 9
-
-# 		while pos_arr[right]
-
-			
-# 		end
+def perms string
+  
 
 
 
-# 	end
 
-# end
 
+end
 
 
 
