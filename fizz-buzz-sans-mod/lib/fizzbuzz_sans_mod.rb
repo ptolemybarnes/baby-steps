@@ -13,12 +13,7 @@ class Fixnum
   end
 
   def divisible_by?(divisor)
-    num = 0
-    until num > self
-      return true if num == self
-      num += divisor
-    end
-    false
+    (self / divisor.to_f) == self / divisor
   end
 
 end
